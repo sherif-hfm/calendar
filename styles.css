@@ -1,0 +1,342 @@
+:root {
+  --gold: #c4956a;
+  --gold-light: #d4ad88;
+  --green: #245e4a;
+  --green-dark: #1a4636;
+  --green-light: #d6e8e0;
+  --maroon: #7a1525;
+  --maroon-light: #a02030;
+  --cream: #ede1d0;
+  --cream-light: #f5f0e6;
+  --cream-dark: #ddd0bb;
+  --khaki: #b0986a;
+  --khaki-light: #c8b88e;
+  --khaki-dark: #8a7850;
+
+  --bg-page: var(--cream-light);
+  --bg-month: #faf8f4;
+  --header-text: #fff;
+  --cell-bg: #faf8f4;
+  --cell-hover: var(--cream);
+  --cell-border: var(--cream-dark);
+  --gregorian-text: #2c2418;
+  --hijri-text: #7a6e5c;
+  --empty-cell: var(--cream);
+
+  --shadow-sm: 0 1px 3px rgba(36,94,74,0.06);
+  --shadow-md: 0 4px 14px rgba(36,94,74,0.10);
+  --shadow-lg: 0 8px 24px rgba(36,94,74,0.14);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font-arabic: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-arabic);
+  background: var(--bg-page) url('assets/islamic-bg.svg') repeat;
+  background-attachment: fixed;
+  color: var(--gregorian-text);
+  line-height: 1.4;
+}
+
+/* ─── Header ─── */
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+  box-shadow: 0 4px 20px rgba(26,70,54,0.3);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--header-text);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+.year-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.year-label {
+  font-weight: 600;
+  color: var(--gold-light);
+  font-size: 0.95rem;
+}
+
+#year-select {
+  width: 5.5rem;
+  padding: 0.5rem 0.6rem;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+  border: 2px solid var(--gold);
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  backdrop-filter: blur(4px);
+  transition: var(--transition);
+}
+
+#year-select:focus {
+  outline: none;
+  border-color: var(--gold-light);
+  background: rgba(255,255,255,0.2);
+  box-shadow: 0 0 0 3px rgba(196,149,106,0.3);
+}
+
+.btn-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  background: rgba(255,255,255,0.1);
+  border: 2px solid var(--gold);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  backdrop-filter: blur(4px);
+}
+
+.btn-icon:hover {
+  background: var(--gold);
+  color: #fff;
+  border-color: var(--gold);
+  transform: scale(1.05);
+}
+
+.btn-icon:active {
+  transform: scale(0.97);
+}
+
+.btn-icon:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(196,149,106,0.3);
+}
+
+/* ─── Grid ─── */
+
+.calendar-wrapper {
+  padding: 1.75rem;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 960px) {
+  .calendar-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .calendar-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem 1rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+}
+
+/* ─── Month Card ─── */
+
+.month-card {
+  background: var(--bg-month);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--cream-dark);
+  transition: var(--transition);
+}
+
+.month-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.month-card.current-month {
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 0 4px rgba(196,149,106,0.2), var(--shadow-lg);
+  transform: scale(1.03);
+  z-index: 2;
+  position: relative;
+}
+
+.month-card.current-month:hover {
+  box-shadow: 0 0 0 5px rgba(196,149,106,0.28), var(--shadow-lg);
+  transform: scale(1.04);
+}
+
+.month-header {
+  background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+  color: var(--header-text);
+  padding: 0.7rem 0.85rem;
+  text-align: center;
+}
+
+.current-month .month-header {
+  background: linear-gradient(135deg, var(--maroon) 0%, var(--maroon-light) 100%);
+}
+
+.current-month .month-header .month-title {
+  font-size: 1.1rem;
+}
+
+.current-month .days-row {
+  background: linear-gradient(180deg, #f0dcc4 0%, var(--cream-light) 100%);
+}
+
+.current-month .day-name {
+  color: var(--maroon);
+}
+
+.current-month .day-cell:not(.empty):not(.today) {
+  background: #fdf8f2;
+}
+
+.current-month .day-cell:not(.empty):not(.today):hover {
+  background: #f5e8d6;
+}
+
+.month-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.month-hijri {
+  margin: 0.2rem 0 0;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--gold-light);
+}
+
+/* ─── Day Names ─── */
+
+.days-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: linear-gradient(180deg, var(--green-light) 0%, #eef5f1 100%);
+  padding: 0.4rem 0.2rem;
+}
+
+.day-name {
+  text-align: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--green);
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+/* ─── Day Grid ─── */
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--cream-dark);
+  padding: 1px;
+}
+
+.day-cell {
+  min-height: 2.6rem;
+  padding: 0.25rem 0.3rem;
+  background: var(--cell-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  transition: background var(--transition);
+  position: relative;
+}
+
+.day-cell:not(.empty):hover {
+  background: var(--cell-hover);
+}
+
+.day-cell.empty {
+  background: var(--empty-cell);
+}
+
+.day-cell .gregorian {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gregorian-text);
+  text-align: right;
+  line-height: 1.2;
+}
+
+.day-cell .hijri {
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: var(--hijri-text);
+  text-align: left;
+  line-height: 1.2;
+}
+
+.day-cell.empty .gregorian,
+.day-cell.empty .hijri {
+  visibility: hidden;
+}
+
+/* ─── Today Highlight ─── */
+
+.day-cell.today {
+  background: var(--maroon);
+  border-radius: 4px;
+}
+
+.day-cell.today .gregorian {
+  color: #fff;
+  font-weight: 800;
+}
+
+.day-cell.today .hijri {
+  color: var(--gold-light);
+  font-weight: 600;
+}
+
+/* ─── Friday column (last column) ─── */
+
+.day-cell:nth-child(7n) .gregorian {
+  color: var(--green);
+}

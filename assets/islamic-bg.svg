@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <defs>
+    <pattern id="star" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+      <!-- 8-pointed Islamic star (rub el hizb) at center of tile -->
+      <path d="M40 0 L44 36 L80 40 L44 44 L40 80 L36 44 L0 40 L36 36 Z" fill="none" stroke="#245e4a" stroke-width="0.5" opacity="0.14"/>
+      <path d="M40 8 L42 32 L58 40 L42 48 L40 72 L38 48 L22 40 L38 32 Z" fill="none" stroke="#c4956a" stroke-width="0.35" opacity="0.1"/>
+      <!-- Small diamonds between stars -->
+      <path d="M40 20 L60 40 L40 60 L20 40 Z" fill="none" stroke="#7a1525" stroke-width="0.3" opacity="0.06"/>
+    </pattern>
+  </defs>
+  <rect width="80" height="80" fill="#f5f0e6"/>
+  <rect width="80" height="80" fill="url(#star)"/>
+</svg>
