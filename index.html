@@ -12,8 +12,12 @@
 <body>
   <header class="header">
     <h1 class="title">التقويم الميلادي وتقويم أم القرى</h1>
+    <div class="view-switch" role="group" aria-label="نوع العرض">
+      <button type="button" id="view-gregorian" class="btn-view active" aria-pressed="true">ميلادي مع أم القرى</button>
+      <button type="button" id="view-hijri" class="btn-view" aria-pressed="false">أم القرى مع ميلادي</button>
+    </div>
     <div class="year-control">
-      <label for="year-select" class="year-label">السنة</label>
+      <label for="year-select" class="year-label" id="year-label">السنة</label>
       <input type="number" id="year-select" min="1900" max="2100" value="" aria-label="السنة">
       <button type="button" id="year-prev" class="btn-icon" aria-label="السنة السابقة">‹</button>
       <button type="button" id="year-next" class="btn-icon" aria-label="السنة التالية">›</button>

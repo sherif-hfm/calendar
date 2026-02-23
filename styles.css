@@ -17,6 +17,8 @@
   --bg-month: #faf8f4;
   --header-text: #fff;
   --cell-bg: #faf8f4;
+  --cell-bg-alt: #efe8dc;
+  --cell-bg-alt-2: #e4dccf;
   --cell-hover: var(--cream);
   --cell-border: var(--cream-dark);
   --gregorian-text: #2c2418;
@@ -68,6 +70,42 @@ body {
   font-weight: 700;
   color: var(--header-text);
   text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+.view-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.btn-view {
+  padding: 0.5rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  background: rgba(255,255,255,0.1);
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  backdrop-filter: blur(4px);
+}
+
+.btn-view:hover {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+.btn-view.active {
+  background: var(--gold);
+  color: #fff;
+  border-color: var(--gold-light);
+}
+
+.btn-view:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(196,149,106,0.3);
 }
 
 .year-control {
@@ -297,6 +335,39 @@ body {
   background: var(--empty-cell);
 }
 
+/* Alternate background when the other calendar spans two months in one card */
+.day-cell:not(.empty).other-segment-1 {
+  background: var(--cell-bg-alt);
+}
+
+.day-cell:not(.empty).other-segment-1:hover {
+  background: var(--cell-hover);
+}
+
+.day-cell:not(.empty).other-segment-2 {
+  background: var(--cell-bg-alt-2);
+}
+
+.day-cell:not(.empty).other-segment-2:hover {
+  background: var(--cell-hover);
+}
+
+.current-month .day-cell:not(.empty):not(.today).other-segment-1 {
+  background: #f5ebe0;
+}
+
+.current-month .day-cell:not(.empty):not(.today).other-segment-1:hover {
+  background: #f5e8d6;
+}
+
+.current-month .day-cell:not(.empty):not(.today).other-segment-2 {
+  background: #ebe0d4;
+}
+
+.current-month .day-cell:not(.empty):not(.today).other-segment-2:hover {
+  background: #f5e8d6;
+}
+
 .day-cell .gregorian {
   font-size: 0.85rem;
   font-weight: 700;
@@ -313,6 +384,31 @@ body {
   line-height: 1.2;
 }
 
+/* Hijri-primary view: swap emphasis in day cells */
+body.view-hijri-primary .day-cell .hijri {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gregorian-text);
+  text-align: right;
+}
+
+body.view-hijri-primary .day-cell .gregorian {
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: var(--hijri-text);
+  text-align: left;
+}
+
+body.view-hijri-primary .day-cell.today .hijri {
+  color: #fff;
+  font-weight: 800;
+}
+
+body.view-hijri-primary .day-cell.today .gregorian {
+  color: var(--gold-light);
+  font-weight: 600;
+}
+
 .day-cell.empty .gregorian,
 .day-cell.empty .hijri {
   visibility: hidden;
@@ -320,9 +416,18 @@ body {
 
 /* ─── Today Highlight ─── */
 
-.day-cell.today {
+.day-cell.today,
+.day-cell.today.other-segment-0,
+.day-cell.today.other-segment-1,
+.day-cell.today.other-segment-2 {
   background: var(--maroon);
   border-radius: 4px;
+}
+
+.day-cell.today:hover,
+.day-cell.today.other-segment-1:hover,
+.day-cell.today.other-segment-2:hover {
+  background: var(--maroon-light);
 }
 
 .day-cell.today .gregorian {
@@ -338,5 +443,9 @@ body {
 /* ─── Friday column (last column) ─── */
 
 .day-cell:nth-child(7n) .gregorian {
+  color: var(--green);
+}
+
+body.view-hijri-primary .day-cell:nth-child(7n) .hijri {
   color: var(--green);
 }
