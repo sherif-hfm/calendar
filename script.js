@@ -160,6 +160,11 @@
         const seg = hijri.month != null && hijriMonthToSegment[hijri.month] !== undefined ? hijriMonthToSegment[hijri.month] : 0;
         const cell = document.createElement('div');
         cell.className = 'day-cell other-segment-' + seg + (isToday ? ' today' : '');
+        const gregFull = d + ' ' + GREGORIAN_MONTHS_AR[m] + ' ' + year;
+        const hijriFull = (hijri.day != null && hijri.year != null)
+          ? hijri.day + ' ' + getHijriMonthName(date) + ' ' + hijri.year + ' هـ'
+          : '';
+        cell.title = hijriFull ? gregFull + '\n' + hijriFull : gregFull;
         cell.innerHTML =
           '<span class="gregorian">' + d + '</span>' +
           '<span class="hijri">' + hijriDay + '</span>';
@@ -251,6 +256,14 @@
         var seg = gDate && gregMonthToSegment[gDate.getMonth()] !== undefined ? gregMonthToSegment[gDate.getMonth()] : 0;
         var cell = document.createElement('div');
         cell.className = 'day-cell other-segment-' + seg + (isToday ? ' today' : '') + ' view-hijri-primary';
+        if (gDate) {
+          var gregFull = gDate.getDate() + ' ' + GREGORIAN_MONTHS_AR[gDate.getMonth()] + ' ' + gDate.getFullYear();
+          var hijriParts = getHijriParts(gDate);
+          var hijriFull = (hijriParts.day != null && hijriParts.year != null)
+            ? hijriParts.day + ' ' + getHijriMonthName(gDate) + ' ' + hijriParts.year + ' هـ'
+            : '';
+          cell.title = hijriFull ? gregFull + '\n' + hijriFull : gregFull;
+        }
         cell.innerHTML =
           '<span class="hijri">' + hd + '</span>' +
           '<span class="gregorian">' + gDay + '</span>';
