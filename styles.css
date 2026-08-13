@@ -41,6 +41,8 @@
 body {
   margin: 0;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-arabic);
   background: var(--bg-page) url('assets/islamic-bg.svg') repeat;
   background-attachment: fixed;
@@ -205,9 +207,11 @@ body {
 /* ─── Grid ─── */
 
 .calendar-wrapper {
+  flex: 1;
   padding: 1.75rem;
   max-width: 1440px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .calendar-grid {
@@ -479,4 +483,40 @@ body.view-hijri-primary .day-cell.today .gregorian {
 
 body.view-hijri-primary .day-cell:nth-child(7n) .hijri {
   color: var(--green);
+}
+
+/* ─── Footer ─── */
+
+.site-footer {
+  padding: 1.25rem 1.5rem 1.75rem;
+  text-align: center;
+}
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.9rem;
+  color: var(--green);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.github-link:hover {
+  color: var(--green-dark);
+  background: rgba(36, 94, 74, 0.1);
+}
+
+.github-link:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(36, 94, 74, 0.22);
+}
+
+.github-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex-shrink: 0;
 }
