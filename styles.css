@@ -176,6 +176,32 @@ body {
   box-shadow: 0 0 0 3px rgba(196,149,106,0.3);
 }
 
+.btn-current-month {
+  padding: 0.5rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  background: rgba(255,255,255,0.1);
+  border: 2px solid var(--gold);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition);
+  backdrop-filter: blur(4px);
+}
+
+.btn-current-month:hover {
+  background: var(--gold);
+  color: #fff;
+  border-color: var(--gold);
+}
+
+.btn-current-month:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(196,149,106,0.3);
+}
+
 /* ─── Grid ─── */
 
 .calendar-wrapper {
@@ -211,6 +237,10 @@ body {
   .title {
     font-size: 1.25rem;
   }
+
+  .month-card.current-month {
+    scroll-margin-top: 14rem;
+  }
 }
 
 /* ─── Month Card ─── */
@@ -235,6 +265,7 @@ body {
   transform: scale(1.03);
   z-index: 2;
   position: relative;
+  scroll-margin-top: 7rem;
 }
 
 .month-card.current-month:hover {

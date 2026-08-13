@@ -16,6 +16,7 @@
   const gridEl = document.getElementById('calendar-grid');
   const viewGregorianBtn = document.getElementById('view-gregorian');
   const viewHijriBtn = document.getElementById('view-hijri');
+  const goToCurrentMonthLink = document.getElementById('go-to-current-month');
 
   var viewMode = 'gregorian'; // 'gregorian' | 'hijri'
 
@@ -114,6 +115,7 @@
 
       const card = document.createElement('div');
       card.className = 'month-card' + (isCurrentMonth ? ' current-month' : '');
+      if (isCurrentMonth) card.id = 'current-month';
 
       const header = document.createElement('div');
       header.className = 'month-header';
@@ -197,6 +199,7 @@
     var todayYear = now.getFullYear();
     var todayMonth = now.getMonth();
     var todayDay = now.getDate();
+    var todayHijri = getHijriParts(now);
 
     for (var hm = 1; hm <= 12; hm++) {
       var firstDate = lookup[hm] && lookup[hm][1];
@@ -211,7 +214,9 @@
 
       var card = document.createElement('div');
       card.className = 'month-card view-hijri-primary';
-      var isCurrentMonth = firstDate.getFullYear() === todayYear && firstDate.getMonth() === todayMonth;
+      // Current Hijri month = the month that contains today, not the month whose first day
+      // happens to fall in the current Gregorian month (Hijri months span two Gregorian months).
+      var isCurrentMonth = todayHijri.year === hijriYear && todayHijri.month === hm;
 
       var header = document.createElement('div');
       header.className = 'month-header';
@@ -280,7 +285,10 @@
       }
 
       card.appendChild(daysGrid);
-      if (isCurrentMonth) card.classList.add('current-month');
+      if (isCurrentMonth) {
+        card.classList.add('current-month');
+        card.id = 'current-month';
+      }
       gridEl.appendChild(card);
     }
   }
@@ -316,6 +324,31 @@
     }
   }
 
+  function scrollToCurrentMonth() {
+    var current = document.getElementById('current-month');
+    if (!current) return;
+    var header = document.querySelector('.header');
+    var offset = (header ? header.offsetHeight : 0) + 12;
+    var top = current.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  }
+
+  function goToCurrentMonth(event) {
+    if (event) event.preventDefault();
+
+    var targetYear = viewMode === 'hijri'
+      ? getHijriParts(new Date()).year
+      : new Date().getFullYear();
+
+    if (parseInt(yearInput.value, 10) !== targetYear) {
+      renderYear(targetYear);
+    }
+
+    requestAnimationFrame(function () {
+      scrollToCurrentMonth();
+    });
+  }
+
   function init() {
     setViewMode('gregorian');
 
@@ -338,6 +371,8 @@
     viewHijriBtn.addEventListener('click', function () {
       setViewMode('hijri');
     });
+
+    goToCurrentMonthLink.addEventListener('click', goToCurrentMonth);
   }
 
   init();
