@@ -48,27 +48,59 @@
     return parts.year != null ? parts.year : '';
   }
 
+  function addDays(date, n) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + n);
+  }
+
+  /** Tabular (Kuwaiti) Hijri → Gregorian. May differ from Umm al-Qura by 1–2 days. */
+  function tabularHijriToDate(hy, hm, hd) {
+    var jdn =
+      Math.floor((11 * hy + 3) / 30) +
+      354 * hy +
+      30 * hm -
+      Math.floor((hm - 1) / 2) +
+      hd +
+      1948055;
+    var utc = new Date(Date.UTC(1970, 0, 1 + (jdn - 2440588), 12, 0, 0));
+    return new Date(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate());
+  }
+
+  /** Snap the tabular guess to the browser's Umm al-Qura date within ±3 days. */
+  function hijriToGregorianUmmAlQura(hy, hm, hd) {
+    var guess = tabularHijriToDate(hy, hm, hd);
+    var offset;
+    for (offset = 0; offset <= 3; offset++) {
+      var candidates = offset === 0 ? [0] : [offset, -offset];
+      var i;
+      for (i = 0; i < candidates.length; i++) {
+        var d = addDays(guess, candidates[i]);
+        var parts = getHijriParts(d);
+        if (parts.year === hy && parts.month === hm && parts.day === hd) {
+          return d;
+        }
+      }
+    }
+    return null;
+  }
+
   /**
    * Build a lookup: for each (hijriMonth, hijriDay) in the given Hijri year, store the Gregorian date.
-   * Single pass over a Gregorian range so the browser doesn't freeze.
+   * Uses a tabular guess for the 1st of each month, then confirms with Umm al-Qura (±3 days).
    */
   function buildHijriYearLookup(hy) {
-    var startYear = 622 + Math.floor((hy - 1) * 354 / 365) - 1;
-    var endYear = 622 + Math.ceil((hy + 2) * 354 / 365) + 1;
-    var start = new Date(startYear, 0, 1);
-    var end = new Date(endYear, 11, 31);
     var byMonth = {};
-    var t = start.getTime();
-    var endT = end.getTime();
-    var oneDay = 24 * 60 * 60 * 1000;
-    while (t <= endT) {
-      var d = new Date(t);
-      var parts = getHijriParts(d);
-      if (parts.year === hy && parts.month != null && parts.day != null) {
-        if (!byMonth[parts.month]) byMonth[parts.month] = {};
-        byMonth[parts.month][parts.day] = new Date(t);
+    var hm;
+    for (hm = 1; hm <= 12; hm++) {
+      var first = hijriToGregorianUmmAlQura(hy, hm, 1);
+      if (!first) continue;
+      byMonth[hm] = { 1: first };
+      var hd;
+      for (hd = 2; hd <= 30; hd++) {
+        var d = addDays(first, hd - 1);
+        var parts = getHijriParts(d);
+        if (parts.year !== hy || parts.month !== hm) break;
+        byMonth[hm][hd] = d;
       }
-      t += oneDay;
     }
     return byMonth;
   }
