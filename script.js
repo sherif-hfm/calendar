@@ -43,6 +43,10 @@
     return new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', { month: 'long' }).format(date);
   }
 
+  function formatMonthLabel(monthNumber, monthName) {
+    return monthNumber + ' - ' + monthName;
+  }
+
   function getHijriYear(date) {
     var parts = getHijriParts(date);
     return parts.year != null ? parts.year : '';
@@ -152,7 +156,7 @@
       const header = document.createElement('div');
       header.className = 'month-header';
       header.innerHTML =
-        '<p class="month-title">' + GREGORIAN_MONTHS_AR[m] + ' ' + year + '</p>' +
+        '<p class="month-title">' + formatMonthLabel(m + 1, GREGORIAN_MONTHS_AR[m]) + ' ' + year + '</p>' +
         '<p class="month-hijri">' + hijriHeader + '</p>';
       card.appendChild(header);
 
@@ -253,7 +257,7 @@
       var header = document.createElement('div');
       header.className = 'month-header';
       header.innerHTML =
-        '<p class="month-title">' + hijriMonthName + ' ' + hijriYear + ' هـ</p>' +
+        '<p class="month-title">' + formatMonthLabel(hm, hijriMonthName) + ' ' + hijriYear + ' هـ</p>' +
         '<p class="month-hijri">' + gregFirst + ' – ' + gregLast + '</p>';
       card.appendChild(header);
 
