@@ -47,6 +47,11 @@
     return monthNumber + ' - ' + monthName;
   }
 
+  function formatMonthNameWithNumber(monthName, monthNumber) {
+    if (monthNumber == null || monthNumber === '' || isNaN(monthNumber)) return monthName;
+    return monthName + ' (' + monthNumber + ')';
+  }
+
   function getHijriYear(date) {
     var parts = getHijriParts(date);
     return parts.year != null ? parts.year : '';
@@ -145,8 +150,8 @@
       const d2 = (hijriLast.day != null && !isNaN(hijriLast.day)) ? hijriLast.day : '';
       const y1 = (hijriFirst.year != null && !isNaN(hijriFirst.year)) ? hijriFirst.year : '';
       const y2 = (hijriLast.year != null && !isNaN(hijriLast.year)) ? hijriLast.year : '';
-      const hijriStartStr = (d1 !== '' ? d1 + ' ' : '') + hijriMonthFirst + (y1 !== '' ? ' ' + y1 + ' هـ' : '');
-      const hijriEndStr = (d2 !== '' ? d2 + ' ' : '') + hijriMonthLast + (y2 !== '' ? ' ' + y2 + ' هـ' : '');
+      const hijriStartStr = (d1 !== '' ? d1 + ' ' : '') + formatMonthNameWithNumber(hijriMonthFirst, hijriFirst.month) + (y1 !== '' ? ' ' + y1 + ' هـ' : '');
+      const hijriEndStr = (d2 !== '' ? d2 + ' ' : '') + formatMonthNameWithNumber(hijriMonthLast, hijriLast.month) + (y2 !== '' ? ' ' + y2 + ' هـ' : '');
       const hijriHeader = hijriStartStr + ' – ' + hijriEndStr;
 
       const card = document.createElement('div');
@@ -200,7 +205,7 @@
         cell.className = 'day-cell other-segment-' + seg + (isToday ? ' today' : '');
         const gregFull = d + ' ' + GREGORIAN_MONTHS_AR[m] + ' ' + year;
         const hijriFull = (hijri.day != null && hijri.year != null)
-          ? hijri.day + ' ' + getHijriMonthName(date) + ' ' + hijri.year + ' هـ'
+          ? hijri.day + ' ' + formatMonthNameWithNumber(getHijriMonthName(date), hijri.month) + ' ' + hijri.year + ' هـ'
           : '';
         cell.title = hijriFull ? gregFull + '\n' + hijriFull : gregFull;
         cell.innerHTML =
@@ -245,8 +250,8 @@
 
       var lastDate = lookup[hm][daysInMonth];
       var hijriMonthName = getHijriMonthName(firstDate);
-      var gregFirst = firstDate.getDate() + ' ' + GREGORIAN_MONTHS_AR[firstDate.getMonth()] + ' ' + firstDate.getFullYear();
-      var gregLast = lastDate ? (lastDate.getDate() + ' ' + GREGORIAN_MONTHS_AR[lastDate.getMonth()] + ' ' + lastDate.getFullYear()) : '';
+      var gregFirst = firstDate.getDate() + ' ' + formatMonthNameWithNumber(GREGORIAN_MONTHS_AR[firstDate.getMonth()], firstDate.getMonth() + 1) + ' ' + firstDate.getFullYear();
+      var gregLast = lastDate ? (lastDate.getDate() + ' ' + formatMonthNameWithNumber(GREGORIAN_MONTHS_AR[lastDate.getMonth()], lastDate.getMonth() + 1) + ' ' + lastDate.getFullYear()) : '';
 
       var card = document.createElement('div');
       card.className = 'month-card view-hijri-primary';
@@ -298,7 +303,7 @@
         var cell = document.createElement('div');
         cell.className = 'day-cell other-segment-' + seg + (isToday ? ' today' : '') + ' view-hijri-primary';
         if (gDate) {
-          var gregFull = gDate.getDate() + ' ' + GREGORIAN_MONTHS_AR[gDate.getMonth()] + ' ' + gDate.getFullYear();
+          var gregFull = gDate.getDate() + ' ' + formatMonthNameWithNumber(GREGORIAN_MONTHS_AR[gDate.getMonth()], gDate.getMonth() + 1) + ' ' + gDate.getFullYear();
           var hijriParts = getHijriParts(gDate);
           var hijriFull = (hijriParts.day != null && hijriParts.year != null)
             ? hijriParts.day + ' ' + getHijriMonthName(gDate) + ' ' + hijriParts.year + ' هـ'
